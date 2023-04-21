@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Internship;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
-class InternshipController extends Controller
+class PostController extends Controller
 {
-    public function list_internships(Request $request)
+    public function list_posts(Request $request)
     {
         $user = $request->user();
         $profile = $user->profile;
@@ -15,52 +15,52 @@ class InternshipController extends Controller
         $profile_id = $profile->id;
 
         if ($profile_type == 'admin' || $profile_type == 'staff') {
-            $internships = Internship::all();
-            return view('internship.staff_list', compact('internships'));
+            $posts = Post::all();
+            return view('post.staff_list', compact('posts'));
         } else if ($profile_type == 'employee') {
-            $internships = Internship::where([
+            $posts = Post::where([
                 ['employer_id', '=', $profile->employer->id]
             ])->first();
-            return view('internship.employer_list', compact('internships'));
+            return view('post.employer_list', compact('posts'));
         } else if ($profile_type == 'intern') {
-            $internships = Internship::where([
+            $posts = Post::where([
                 ['applicant_id', '=', $profile_id]
             ])->first();
-            return view('internship.intern_list', compact('internships'));
+            return view('post.intern_list', compact('posts'));
         } else {
 
         }
     }
 
-    public function detail_internship(Request $request)
+    public function detail_post(Request $request)
     {
         $user = $request->user();
         $profile = $user->profile;
         $profile_type = $profile->type;
         $profile_id = $profile->id;
 
-        $internship_id = (int) $request->route('internship_id');
+        $post_id = (int) $request->route('post_id');
         if ($profile_type == 'admin' || $profile_type == 'staff') {
-            $internship = Internship::find($internship_id);
-            return view('internship.staff_detail', compact('internship'));
+            $post = Post::find($post_id);
+            return view('post.staff_detail', compact('post'));
         } else if ($profile_type == 'employee') {
-            $internship = Internship::where([
-                ['id', '=', $internship_id],
+            $post = Post::where([
+                ['id', '=', $post_id],
                 ['employer_id', '=', $profile->employer->id]
             ]);
-            return view('internship.employer_detail', compact('internship'));
+            return view('post.employer_detail', compact('post'));
         } else if ($profile_type == 'intern') {
-            $internship = Internship::where([
-                ['id', '=', $internship_id],
+            $post = Post::where([
+                ['id', '=', $post_id],
                 ['applicant_id', '=', $profile_id]
             ])->first();
-            return view('internship.intern_detail', compact('internship'));
+            return view('post.intern_detail', compact('post'));
         } else {
 
         }
     }
 
-    public function create_internship(Request $request)
+    public function create_post(Request $request)
     {
         $user = $request->user();
         $profile = $user->profile;
@@ -68,7 +68,7 @@ class InternshipController extends Controller
         $profile_id = $profile->id;
 
         if ($profile_type == 'intern') {
-            $internship = Internship::create([
+            $post = Post::create([
                 'applicant_id' => $profile_id,
             ]);
         } else {
@@ -78,7 +78,7 @@ class InternshipController extends Controller
         return back();
     }
 
-    public function update_internship(Request $request)
+    public function update_post(Request $request)
     {
 
         $user = $request->user();
@@ -86,17 +86,17 @@ class InternshipController extends Controller
         $profile_type = $profile->type;
         $profile_id = $profile->id;
 
-        $internship_id = (int) $request->route('internship_id');
+        $post_id = (int) $request->route('post_id');
 
         if ($profile_type == 'admin' || $profile_type == 'staff') {
-            $internship = Internship::find($internship_id);
-            $internship->update([]);
+            $post = Post::find($post_id);
+            $post->update([]);
         } else if ($profile_type == 'intern') {
-            $internship = Internship::where([
-                ['id', '=', $internship_id],
+            $post = Post::where([
+                ['id', '=', $post_id],
                 ['applicant_id', '=', $profile_id]
             ])->first();
-            $internship->update([]);
+            $post->update([]);
         } else {
 
         }    

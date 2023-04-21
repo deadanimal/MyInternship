@@ -5,29 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Internship extends Model
+class Application extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        /// more to add here...
 
-        'application_id',
+        'applicant_id',        
         'employer_id',
-        'intern_id',
+        'post_id',
     ];    
 
-    public function application()
+    public function applicant()
     {
-        return $this->belongsTo(Application::class, 'application_id');
-    }    
-    
-    public function intern()
-    {
-        return $this->belongsTo(Profile::class, 'profile_id');
-    }      
+        return $this->belongsTo(Profile::class, 'applicant_id');
+    }     
     
     public function employer()
     {
         return $this->belongsTo(Employer::class, 'employer_id');
+    }       
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class, 'post_id');
     }     
 }

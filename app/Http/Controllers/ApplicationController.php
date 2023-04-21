@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Internship;
+use App\Models\Application;
 use Illuminate\Http\Request;
 
-class InternshipController extends Controller
+class ApplicationController extends Controller
 {
-    public function list_internships(Request $request)
+    public function list_applications(Request $request)
     {
         $user = $request->user();
         $profile = $user->profile;
@@ -15,52 +15,52 @@ class InternshipController extends Controller
         $profile_id = $profile->id;
 
         if ($profile_type == 'admin' || $profile_type == 'staff') {
-            $internships = Internship::all();
-            return view('internship.staff_list', compact('internships'));
+            $applications = Application::all();
+            return view('application.staff_list', compact('applications'));
         } else if ($profile_type == 'employee') {
-            $internships = Internship::where([
+            $applications = Application::where([
                 ['employer_id', '=', $profile->employer->id]
             ])->first();
-            return view('internship.employer_list', compact('internships'));
+            return view('application.employer_list', compact('applications'));
         } else if ($profile_type == 'intern') {
-            $internships = Internship::where([
+            $applications = Application::where([
                 ['applicant_id', '=', $profile_id]
             ])->first();
-            return view('internship.intern_list', compact('internships'));
+            return view('application.intern_list', compact('applications'));
         } else {
 
         }
     }
 
-    public function detail_internship(Request $request)
+    public function detail_application(Request $request)
     {
         $user = $request->user();
         $profile = $user->profile;
         $profile_type = $profile->type;
         $profile_id = $profile->id;
 
-        $internship_id = (int) $request->route('internship_id');
+        $application_id = (int) $request->route('application_id');
         if ($profile_type == 'admin' || $profile_type == 'staff') {
-            $internship = Internship::find($internship_id);
-            return view('internship.staff_detail', compact('internship'));
+            $application = Application::find($application_id);
+            return view('application.staff_detail', compact('application'));
         } else if ($profile_type == 'employee') {
-            $internship = Internship::where([
-                ['id', '=', $internship_id],
+            $application = Application::where([
+                ['id', '=', $application_id],
                 ['employer_id', '=', $profile->employer->id]
             ]);
-            return view('internship.employer_detail', compact('internship'));
+            return view('application.employer_detail', compact('application'));
         } else if ($profile_type == 'intern') {
-            $internship = Internship::where([
-                ['id', '=', $internship_id],
+            $application = Application::where([
+                ['id', '=', $application_id],
                 ['applicant_id', '=', $profile_id]
             ])->first();
-            return view('internship.intern_detail', compact('internship'));
+            return view('application.intern_detail', compact('application'));
         } else {
 
         }
     }
 
-    public function create_internship(Request $request)
+    public function create_application(Request $request)
     {
         $user = $request->user();
         $profile = $user->profile;
@@ -68,7 +68,7 @@ class InternshipController extends Controller
         $profile_id = $profile->id;
 
         if ($profile_type == 'intern') {
-            $internship = Internship::create([
+            $application = Application::create([
                 'applicant_id' => $profile_id,
             ]);
         } else {
@@ -78,7 +78,7 @@ class InternshipController extends Controller
         return back();
     }
 
-    public function update_internship(Request $request)
+    public function update_application(Request $request)
     {
 
         $user = $request->user();
@@ -86,17 +86,17 @@ class InternshipController extends Controller
         $profile_type = $profile->type;
         $profile_id = $profile->id;
 
-        $internship_id = (int) $request->route('internship_id');
+        $application_id = (int) $request->route('application_id');
 
         if ($profile_type == 'admin' || $profile_type == 'staff') {
-            $internship = Internship::find($internship_id);
-            $internship->update([]);
+            $application = Application::find($application_id);
+            $application->update([]);
         } else if ($profile_type == 'intern') {
-            $internship = Internship::where([
-                ['id', '=', $internship_id],
+            $application = Application::where([
+                ['id', '=', $application_id],
                 ['applicant_id', '=', $profile_id]
             ])->first();
-            $internship->update([]);
+            $application->update([]);
         } else {
 
         }    
