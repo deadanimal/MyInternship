@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\InternshipController;
-use App\Http\Controllers\InternshipPostController;
 
 Route::middleware('auth')->group(function () {
 
