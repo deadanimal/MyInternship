@@ -1,4 +1,4 @@
-@extends('layouts.static')
+@extends('layout.static')
 
 @section('content')
     <div class="bg-white">
