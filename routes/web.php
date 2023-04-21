@@ -7,4 +7,5 @@ require __DIR__.'/web/employer.php';
 require __DIR__.'/web/internship.php';
 require __DIR__.'/web/post.php';
 require __DIR__.'/web/profile.php';
+require __DIR__.'/web/site.php';
 require __DIR__.'/web/static.php';
